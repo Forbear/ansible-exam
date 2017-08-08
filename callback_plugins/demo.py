@@ -62,7 +62,7 @@ class CallbackModule(CallbackBase):
             self._process_items(result)
         else:
             if (self._display.verbosity > 0 or '_ansible_verbose_always' in result._result) and '_ansible_verbose_override' not in result._result:
-                combined_json  = JSONEncoder().encode(res)
+                combined_json  = JSONEncoder().encode(self._dump_results(result._result))
                 self._display.display(combined_json)
     def v2_runner_on_skipped(self, result):
         msg = self.show(result._task, result._host.get_name(), result._result, "SKIPPED")
