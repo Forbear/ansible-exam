@@ -1,6 +1,9 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
-
+import os
+import time
+import json
+from json import JSONEncoder
 from ansible import constants as C
 from ansible.playbook.task_include import TaskInclude
 from ansible.plugins.callback import CallbackBase
@@ -27,7 +30,6 @@ class CallbackModule(CallbackBase):
                                                                         result.get('rc', 'n/a'))
         buf += "STDOUT: " + result.get('stdout', '') + "\n"
         buf += "STDERR: " + result.get('stderr', '') + "\n"
-        buf += "MSG: " + result.get('msg', '') + "\n"
         return(buf + "\n")
 
     def v2_runner_on_failed(self, result, ignore_errors=False):
@@ -60,9 +62,8 @@ class CallbackModule(CallbackBase):
             self._process_items(result)
         else:
             if (self._display.verbosity > 0 or '_ansible_verbose_always' in result._result) and '_ansible_verbose_override' not in result._result:
-                msg += " => %s\n%s" % (self._dump_results(result._result),"="*80)
-            self._display.display(msg, color=color)
-
+                combined_json  = JSONEncoder().encode(res)
+                self._display.display(combined_json)
     def v2_runner_on_skipped(self, result):
         msg = self.show(result._task, result._host.get_name(), result._result, "SKIPPED")
         self._display.display(msg, color=C.COLOR_SKIP)
