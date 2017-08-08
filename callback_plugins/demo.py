@@ -24,7 +24,7 @@ class CallbackModule(CallbackBase):
         self._last_task_banner = None
         super(CallbackModule, self).__init__()
 
-    def json_log(res):
+    def json_log(self, res):
         parsed = json.loads(res)
         return json.dumps(parsed, indent=4, sort_keys=True)
 
