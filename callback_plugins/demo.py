@@ -57,6 +57,7 @@ class CallbackModule(CallbackBase):
         else:
             msg = self.show(result._task, result._host.get_name(), result._result, "OK")
             color = C.COLOR_OK
+        self._display.display(msg, color=color)
         self._handle_warnings(result._result)
         if result._task.loop and 'results' in result._result:
             self._process_items(result)
