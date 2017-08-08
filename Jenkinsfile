@@ -28,7 +28,6 @@ node("${env.SLAVE}") {
     /*
         use tar tool to package built war file into *.tar.gz package
     */
-    sh "mntlab-exam/"
     sh "echo package artefact"
     sh "tar -czvf mnt-archive.tar.gz target/mnt-exam.war"
     sh "ls -la | grep tar.gz"
