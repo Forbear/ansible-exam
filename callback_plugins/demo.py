@@ -24,6 +24,10 @@ class CallbackModule(CallbackBase):
         self._last_task_banner = None
         super(CallbackModule, self).__init__()
 
+    def json_log(res):
+        parsed = json.loads(res)
+        return json.dumps(parsed, indent=4, sort_keys=True)
+
     def show(self, task, host, result, caption):
         buf = "="*80 + "\n"
         buf += "{0} \nHOST: {1} \nSTATUS: {2} \nrc={3} >>\n".format(task, host, caption,
@@ -63,8 +67,7 @@ class CallbackModule(CallbackBase):
             self._process_items(result)
         else:
             if (self._display.verbosity > 0 or '_ansible_verbose_always' in result._result) and '_ansible_verbose_override' not in result._result:
-                combined_json  = JSONEncoder().encode(self._dump_results(result._result))
-                self._display.display(combined_json)
+                self._display.display(json_log(self._dump_results(result._result)))
     def v2_runner_on_skipped(self, result):
         msg = self.show(result._task, result._host.get_name(), result._result, "SKIPPED")
         self._display.display(msg, color=C.COLOR_SKIP)
