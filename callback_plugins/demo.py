@@ -28,7 +28,6 @@ class CallbackModule(CallbackBase):
         buf += "STDOUT: " + result.get('stdout', '') + "\n"
         buf += "STDERR: " + result.get('stderr', '') + "\n"
         buf += "MSG: " + result.get('msg', '') + "\n"
-        buf +="\n" + "="*80
         return(buf + "\n")
 
     def v2_runner_on_failed(self, result, ignore_errors=False):
@@ -61,11 +60,13 @@ class CallbackModule(CallbackBase):
             self._process_items(result)
         else:
             if (self._display.verbosity > 0 or '_ansible_verbose_always' in result._result) and '_ansible_verbose_override' not in result._result:
-                msg += " => %s" % (self._dump_results(result._result),)
+                msg += " => %s\n%s" % (self._dump_results(result._result),"="*80)
             self._display.display(msg, color=color)
 
     def v2_runner_on_skipped(self, result):
-        self.show(result._task, result._host.get_name(), result._result, "SKIPPED")
+        msg = self.show(result._task, result._host.get_name(), result._result, "SKIPPED")
+        self._display.display(msg, color=C.COLOR_SKIP)
 
     def v2_runner_on_unreachable(self, result):
-        self.show(result._task, result._host.get_name(), result._result, "UNREACHABLE")
+        msg = self.show(result._task, result._host.get_name(), result._result, "UNREACHABLE")
+        self._display.display(msg, color=C.COLOR_UNREACHABLE)
