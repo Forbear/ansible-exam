@@ -3,7 +3,7 @@ node("${env.SLAVE}") {
   /*
     cleanWs()
   */
-    git branch: 'master', url: 'https://github.com/Forbear/ansible.git'
+    git branch: 'master', url: 'https://github.com/Forbear/ansible-exam.git'
   }
   stage("Build"){
     /*
